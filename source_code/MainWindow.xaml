@@ -1,0 +1,261 @@
+﻿<!-- NOTE: the extended toolkit has been used to access the Integer Up/Down button-->
+<!-- http://wpftoolkit.codeplex.com -->
+    
+<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"          
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LevelEditor"
+        xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero" x:Class="LevelEditor.MainWindow"
+    
+       
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+    
+        mc:Ignorable="d"
+        Title="Level Editor - by Gabriel Lewis Q5094111" Height="720" Width="1280" MinHeight="720" MinWidth="1280">
+
+    <Window.Resources>
+        <Style x:Key="ButtonFocusVisual">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle Margin="2" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <LinearGradientBrush x:Key="ButtonNormalBackground" EndPoint="0,1" StartPoint="0,0">
+            <GradientStop Color="#F3F3F3" Offset="0"/>
+            <GradientStop Color="#EBEBEB" Offset="0.5"/>
+            <GradientStop Color="#DDDDDD" Offset="0.5"/>
+            <GradientStop Color="#CDCDCD" Offset="1"/>
+        </LinearGradientBrush>
+        <SolidColorBrush x:Key="ButtonNormalBorder" Color="#FF707070"/>
+        <Style x:Key="something.xaml" TargetType="{x:Type Button}">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource ButtonFocusVisual}"/>
+            <Setter Property="Background" Value="{StaticResource ButtonNormalBackground}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource ButtonNormalBorder}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Themes:ButtonChrome x:Name="Chrome" BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}" RenderMouseOver="{TemplateBinding IsMouseOver}" RenderPressed="{TemplateBinding IsPressed}" RenderDefaulted="{TemplateBinding IsDefaulted}" SnapsToDevicePixels="true">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Themes:ButtonChrome>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsKeyboardFocused" Value="true">
+                                <Setter Property="RenderDefaulted" TargetName="Chrome" Value="true"/>
+                            </Trigger>
+                            <Trigger Property="ToggleButton.IsChecked" Value="true">
+                                <Setter Property="RenderPressed" TargetName="Chrome" Value="true"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Foreground" Value="#ADADAD"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <!-- Shortcuts for save, undo and redo-->
+    <Window.InputBindings>
+        <KeyBinding Modifiers="Ctrl" Key="Z" Command="local:Command.UndoCommand"/>
+        <KeyBinding Modifiers="Ctrl" Key="Y" Command="local:Command.RedoCommand"/>
+        <KeyBinding Modifiers="Ctrl" Key="S" Command="local:Command.SaveCommand"/>
+    </Window.InputBindings>
+
+    <Window.CommandBindings>
+        <CommandBinding Command="local:Command.UndoCommand" Executed="UndoCommandExecuted"/>
+        <CommandBinding Command="local:Command.RedoCommand" Executed="RedoCommandExecuted"/>
+        <CommandBinding Command="local:Command.SaveCommand" Executed="SaveCommandExecuted"/>
+    </Window.CommandBindings>
+
+    
+    <Grid>
+        <Grid Panel.ZIndex="1000">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition MinWidth="1280"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Background rectangle-->
+            <Rectangle Grid.Row="0" Fill="#FFF4F4F5" HorizontalAlignment="Stretch" Height="Auto" Margin="0" Stroke="Black" VerticalAlignment="Stretch" Width="AUTO"/>
+
+            <!-- Buttons to access the tab menus-->
+            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.ColumnSpan="2">
+                <Button Content="File"  Name="button1" Width="75" Click="Level_Menu_Click" />
+                <Button Content="Edit"  Name="button2" Width="75" Click="Edit_Menu_Click" />
+                <Button Content="View"  Name="button3" Width="75" Click="View_Menu_Click" />
+            </StackPanel>
+        </Grid>
+
+        <Grid Margin="0,30,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition  MinHeight="560" />
+                <RowDefinition MinHeight="100"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition MinWidth="880"/>
+                <ColumnDefinition Width="390"/>
+            </Grid.ColumnDefinitions>
+
+           <!-- Background rectangles-->
+            <Rectangle Grid.Column="0" Fill="#FFF4F4F5" HorizontalAlignment="Stretch" Height="Auto" Margin="0,0,0,0" Grid.RowSpan="2" Stroke="Black" VerticalAlignment="Stretch" Width="auto"/>
+            <Rectangle Grid.Column="1" Fill="#FFF4F4F5" HorizontalAlignment="Stretch" Height="Auto" Margin="0,0,0,0" Grid.Row="0" Stroke="Black" VerticalAlignment="Stretch" Width="auto"/>
+
+            <!-- Selecting the layer to draw on-->
+            <StackPanel Grid.Row="1" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Left">
+                <RadioButton Name="_Layer1_RadioButton" Content="Layer 1" IsChecked="True"/>
+                <RadioButton Name="_Layer2_RadioButton" Content="Layer 2"/>
+                <RadioButton Name="_Layer3_RadioButton" Content="Layer 3"/>
+            </StackPanel>
+
+            <!-- Selecting the layers to view-->
+            <CheckBox IsChecked="True" Grid.Row="1" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Left" Click="Layer1_CheckBox_Click" Margin="70,3,0,0"/>
+            <CheckBox IsChecked="True" Grid.Row="1" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Left" Click="Layer2_CheckBox_Click" Margin="70,19,0,0"/>
+            <CheckBox IsChecked="True" Grid.Row="1" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Left" Click="Layer3_CheckBox_Click" Margin="70,35,0,0"/>
+
+            <!-- Holds the all of the tiles and the grid outline-->
+            <ScrollViewer HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible"  Grid.RowSpan="2" Grid.Column="0" Margin="0,0,0,10">
+                <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                    <Canvas RenderOptions.BitmapScalingMode="NearestNeighbor" Name="_Layer0"   HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    <Canvas RenderOptions.BitmapScalingMode="NearestNeighbor" Name="_Layer1"   HorizontalAlignment="Left" VerticalAlignment="Top" />
+                    <Canvas RenderOptions.BitmapScalingMode="NearestNeighbor" Name="_Layer2"   HorizontalAlignment="Left" VerticalAlignment="Top" />
+                    <Canvas RenderOptions.BitmapScalingMode="NearestNeighbor" Name="_Layer3"   HorizontalAlignment="Left" VerticalAlignment="Top"  />
+                    <Canvas RenderOptions.BitmapScalingMode="NearestNeighbor" Name="_LayerGrid" HorizontalAlignment="Left"  VerticalAlignment="Top" />
+                    <Canvas RenderOptions.BitmapScalingMode="NearestNeighbor" Name="_LayerDraw"  Panel.ZIndex="100" MouseUp="MouseUpHandler"  MouseMove="MouseMoveHandler" MouseDown="MouseDownHandler" HorizontalAlignment="Left"  VerticalAlignment="Top"/>
+                </Grid>
+            </ScrollViewer>
+
+            <!-- Tile/Sprite Sheets-->
+            <TabControl Name="_TabControl_SpriteSheets" Grid.Column="1" Grid.RowSpan="1">
+                <TabItem Header="General">
+                    <ScrollViewer Margin="0,0,10,-2" >
+                        <ListView   RenderOptions.BitmapScalingMode="NearestNeighbor" Name="_ListView_TileSet" ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionMode="Single" Width="AUTO" Height="AUTO">
+                            <ListView.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel/>
+                                </ItemsPanelTemplate>
+                            </ListView.ItemsPanel>
+                        </ListView>
+                    </ScrollViewer>
+                </TabItem>
+                <TabItem Header="Damage">
+                    <ScrollViewer Margin="0,0,10,-2" >
+                        <ListView   RenderOptions.BitmapScalingMode="NearestNeighbor" Name="_Enemies_TileSheet" ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionMode="Single" Width="AUTO" Height="AUTO">
+                            <ListView.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel/>
+                                </ItemsPanelTemplate>
+                            </ListView.ItemsPanel>
+                        </ListView>
+                    </ScrollViewer>
+                </TabItem>
+                <TabItem Header="Other">
+                    <ScrollViewer Margin="0,0,10,-2" >
+                        <ListView   RenderOptions.BitmapScalingMode="NearestNeighbor" Name="_Other_Tilesheet" ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionMode="Single" Width="AUTO" Height="AUTO">
+                            <ListView.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel/>
+                                </ItemsPanelTemplate>
+                            </ListView.ItemsPanel>
+                        </ListView>
+                    </ScrollViewer>
+                </TabItem>
+            </TabControl>
+        </Grid>
+
+        <!-- Tab Menus: File, Edit and View -->
+        <Menu x:Name="_Level_Menu" Panel.ZIndex="100" MaxWidth="145" HorizontalAlignment="Left"   Visibility="Collapsed" Margin="0,31,0,520" Background="Gainsboro" Width="102"  >
+            <Menu.ItemsPanel >
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel Orientation="Vertical"/>
+                </ItemsPanelTemplate>
+            </Menu.ItemsPanel>
+            <MenuItem Width="70" HorizontalAlignment="Left" Click="MenuItem_New_Click" >
+                <MenuItem.Header>
+                    <DockPanel>
+                        <Label Content="New"/>
+                    </DockPanel>
+                </MenuItem.Header>
+            </MenuItem>
+            <MenuItem Width="70" HorizontalAlignment="Left" Click="MenuItem_Open_Click" >
+                <MenuItem.Header>
+                    <DockPanel>
+
+                        <Label Content="Open"/>
+                    </DockPanel>
+                </MenuItem.Header>
+            </MenuItem>
+            <MenuItem Width="100" HorizontalAlignment="Left" Click="MenuItem_Save_Click" >
+                <MenuItem.Header>
+                    <DockPanel>
+                        <Label Content="Save (Ctrl + S)"/>
+                    </DockPanel>
+                </MenuItem.Header>
+            </MenuItem>
+            <MenuItem Width="70" HorizontalAlignment="Left" Click="MenuItem_SaveAs_Click" >
+                <MenuItem.Header>
+                    <DockPanel>
+
+                        <Label Content="Save As..." Width="63"/>
+                    </DockPanel>
+                </MenuItem.Header>
+            </MenuItem>
+        </Menu>
+        <Menu  x:Name="_Edit_Menu" MaxWidth="125" Visibility="Collapsed" Margin="75,31,1072,520" Background="Gainsboro"  >
+            <Menu.ItemsPanel >
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel Orientation="Vertical"/>
+                </ItemsPanelTemplate>
+            </Menu.ItemsPanel>
+            <MenuItem Width="110" HorizontalAlignment="Left" Click="Undo_Click" >
+                <MenuItem.Header>
+                    <DockPanel>
+                        <Label Content="Undo (Ctrl + Z)"/>
+                    </DockPanel>
+                </MenuItem.Header>
+            </MenuItem>
+            <MenuItem Width="110" HorizontalAlignment="Left" Click="Redo_Click">
+                <MenuItem.Header>
+                    <DockPanel>
+                        <Label Content="Redo (Ctrl + Y)"/>
+                    </DockPanel>
+                </MenuItem.Header>
+            </MenuItem>
+            <MenuItem Width="110" HorizontalAlignment="Left" Click="GameProperties_Click">
+                <MenuItem.Header>
+                    <DockPanel>
+                        <Label Content="Game Properties" Width="110"/>
+                    </DockPanel>
+                </MenuItem.Header>
+            </MenuItem>
+        </Menu>
+        <Menu  x:Name="_View_Menu"  Visibility="Collapsed" Margin="151,30,1038,619" Background="Gainsboro"  >
+            <Menu.ItemsPanel >
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel Orientation="Vertical"/>
+                </ItemsPanelTemplate>
+            </Menu.ItemsPanel>
+            <MenuItem Width="auto" HorizontalAlignment="Left" Click="ShowGrid_Click">
+                <MenuItem.Header>
+                    <DockPanel>
+                        <Label Content="ShowGrid"/>
+                    </DockPanel>
+                </MenuItem.Header>
+            </MenuItem>
+        </Menu>
+
+    </Grid>
+
+</Window>

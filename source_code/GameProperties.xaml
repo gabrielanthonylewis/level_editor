@@ -1,0 +1,35 @@
+﻿<Window x:Class="LevelEditor.GameProperties"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        
+        xmlns:local="clr-namespace:LevelEditor"
+        mc:Ignorable="d"
+        Title="GameProperties" Height="350" Width="350" ResizeMode="NoResize" Topmost="True">
+    
+    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <Label Content="Lives" Height="30" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,35,0,261"/>
+        <xctk:IntegerUpDown Name="_Lives" Value="3" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="178,33,96,259" Width="70" Height="30"/>
+
+        <Label Content="Health" Height="30" HorizontalAlignment="Left" VerticalAlignment="Center" Width="100" Margin="0,88,0,208"/>
+        <xctk:IntegerUpDown Name="_Health"  Value="100" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="178,86,96,206" Width="70" Height="30"/>
+
+        <Label Content="Damage dealt by spikes" Height="30" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,128,0,168"/>
+        <xctk:IntegerUpDown Name="_DamageSpikes"  Value="100" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="178,126,96,166" Width="70" Height="30"/>
+
+        <Label Content="Damage dealt by Saw bots" Height="30" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,167,0,129"/>
+        <xctk:IntegerUpDown Name="_DamageSawBots"  Value="50" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="178,165,96,127" Width="70" Height="30"/>
+
+        <Label Content="Damage dealt by Turret bots" Height="30" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,207,0,85"/>
+        <xctk:IntegerUpDown x:Name="_DamageTurretBots"  Value="10" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="178,207,96,85" Width="70" Height="30"/>
+
+        <Label Content="Timer" Height="30" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,254,0,38"/>
+        <xctk:IntegerUpDown x:Name="_Timer"  Value="-1" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,254,96,38" Height="30" Width="70"/>
+
+        <Button  Content="Okay" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="120" Click="Okay_Click" Margin="79,0,93,0"/>
+    </Grid>
+</Window>
